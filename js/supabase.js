@@ -1,0 +1,4 @@
+const supabaseUrl = 'https://iqgmjbevyihazhssjodo.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxZ21qYmV2eWloYXpoc3Nqb2RvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTEzODEsImV4cCI6MjA3MTUyNzM4MX0.v6YKtjawGHVL-hXI0BEGXx8WpK3DBac_Wi1c2pjQWkA';
+
+export const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
