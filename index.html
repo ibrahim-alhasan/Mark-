@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نظام إدارة درجات الطلاب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <div class="container">
+          <h1 class="logo">نظام إدارة درجات الطلاب</h1>
+          <nav class="nav">
+            <button id="studentBtn" class="nav-btn active">واجهة الطالب</button>
+            <button id="adminBtn" class="nav-btn">واجهة الإدارة</button>
+          </nav>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="container">
+          <!-- واجهة الطالب -->
+          <section id="studentSection" class="section active">
+            <div class="hero-section">
+              <div class="hero-content">
+                <h1 class="hero-title">نظام إدارة درجات الطلاب</h1>
+                <p class="hero-subtitle">ابحث عن درجاتك باستخدام رقم الطالب</p>
+              </div>
+            </div>
+            
+            <div class="search-card">
+              <div class="search-header">
+                <h2>البحث عن الدرجات</h2>
+                <p>أدخل رقم الطالب للعثور على درجاتك</p>
+              </div>
+              <div class="search-form">
+                <div class="input-group">
+                  <input type="text" id="studentId" placeholder="رقم الطالب (مثال: 2024001)" class="search-input">
+                  <button id="searchMarks" class="search-btn">
+                    <span>البحث</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div id="marksResults" class="results-section hidden">
+              <div class="results-header">
+                <h3 id="studentInfo">درجات الطالب</h3>
+              </div>
+              <div id="marksContainer" class="marks-container"></div>
+            </div>
+          </section>
+
+          <!-- واجهة الإدارة -->
+          <section id="adminSection" class="section">
+            <!-- صفحة تسجيل الدخول -->
+            <div id="loginForm" class="card">
+              <h2 class="section-title">تسجيل دخول الإدارة</h2>
+              <div class="form-group">
+                <label for="adminEmail">البريد الإلكتروني:</label>
+                <input type="email" id="adminEmail" placeholder="أدخل البريد الإلكتروني">
+              </div>
+              <div class="form-group">
+                <label for="adminPassword">كلمة المرور:</label>
+                <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور">
+              </div>
+              <button id="loginBtn" class="btn btn-primary">تسجيل الدخول</button>
+            </div>
+
+            <!-- لوحة التحكم -->
+            <div id="adminPanel" class="admin-panel hidden">
+              <div class="admin-header">
+                <h2>لوحة تحكم الإدارة</h2>
+                <button id="logoutBtn" class="btn btn-secondary">تسجيل الخروج</button>
+              </div>
+
+              <div class="admin-tabs">
+                <button id="addStudentTab" class="tab-btn active">إضافة طالب</button>
+                <button id="addMarksTab" class="tab-btn">إضافة درجات</button>
+              </div>
+
+              <!-- إضافة طالب جديد -->
+              <div id="addStudentForm" class="tab-content active">
+                <div class="admin-card">
+                  <div class="card-header">
+                    <h3>إضافة طالب جديد</h3>
+                    <p>أدخل بيانات الطالب الجديد</p>
+                  </div>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label for="newStudentId">رقم الطالب:</label>
+                      <input type="text" id="newStudentId" placeholder="مثال: 2024001" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="newStudentName">اسم الطالب:</label>
+                      <input type="text" id="newStudentName" placeholder="الاسم الكامل" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="newStudentEmail">البريد الإلكتروني:</label>
+                      <input type="email" id="newStudentEmail" placeholder="student@university.edu" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="newStudentBranch">التخصص:</label>
+                      <select id="newStudentBranch" class="form-select">
+                        <option value="">اختر التخصص</option>
+                        <option value="علوم الحاسوب">علوم الحاسوب</option>
+                        <option value="هندسة البرمجيات">هندسة البرمجيات</option>
+                        <option value="نظم المعلومات">نظم المعلومات</option>
+                        <option value="الذكاء الاصطناعي">الذكاء الاصطناعي</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="newStudentPhone">رقم الهاتف:</label>
+                      <input type="tel" id="newStudentPhone" placeholder="+966 50 123 4567" class="form-input">
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <button id="addStudentBtn" class="btn btn-primary btn-large">إضافة الطالب</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- إضافة درجات -->
+              <div id="addMarksForm" class="tab-content">
+                <div class="admin-card">
+                  <div class="card-header">
+                    <h3>إضافة درجات</h3>
+                    <p>أدخل درجات الطالب للمادة المحددة</p>
+                  </div>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label for="marksStudentId">رقم الطالب:</label>
+                      <input type="text" id="marksStudentId" placeholder="مثال: 2024001" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="marksBranch">التخصص:</label>
+                      <select id="marksBranch" class="form-select">
+                        <option value="">اختر التخصص</option>
+                        <option value="علوم الحاسوب">علوم الحاسوب</option>
+                        <option value="هندسة البرمجيات">هندسة البرمجيات</option>
+                        <option value="نظم المعلومات">نظم المعلومات</option>
+                        <option value="الذكاء الاصطناعي">الذكاء الاصطناعي</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="marksYear">السنة الدراسية:</label>
+                      <select id="marksYear" class="form-select">
+                        <option value="">اختر السنة</option>
+                        <option value="1">السنة الأولى</option>
+                        <option value="2">السنة الثانية</option>
+                        <option value="3">السنة الثالثة</option>
+                        <option value="4">السنة الرابعة</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="marksSemester">الفصل الدراسي:</label>
+                      <select id="marksSemester" class="form-select">
+                        <option value="">اختر الفصل</option>
+                        <option value="1">الفصل الأول</option>
+                        <option value="2">الفصل الثاني</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="marksSubject">المادة:</label>
+                      <input type="text" id="marksSubject" placeholder="اسم المادة" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="marksValue">الدرجة:</label>
+                      <input type="number" id="marksValue" min="0" max="100" placeholder="الدرجة من 100" class="form-input">
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <button id="addMarksBtn" class="btn btn-primary btn-large">إضافة الدرجة</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div id="notification" class="notification hidden">
+      <span id="notificationText"></span>
+      <button id="closeNotification" class="close-btn">&times;</button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
